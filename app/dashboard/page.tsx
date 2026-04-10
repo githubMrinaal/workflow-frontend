@@ -1,19 +1,24 @@
 "use client";
 
-import { useEffect } from "react";
+export const dynamic = "force-dynamic";
+
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { isLoggedIn, getUserEmail, getUserRole, removeToken } from "@/lib/auth";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const email = getUserEmail();
-  const role = getUserRole();
+  const [email, setEmail] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoggedIn()) {
       router.replace("/login");
+      return;
     }
+    setEmail(getUserEmail());
+    setRole(getUserRole());
   }, [router]);
 
   function handleLogout() {

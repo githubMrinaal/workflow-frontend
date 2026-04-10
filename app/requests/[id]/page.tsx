@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { isLoggedIn, getUserRole } from "@/lib/auth";
@@ -25,7 +27,7 @@ function Field({ label, value }: { label: string; value?: string | number | null
 export default function RequestDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const role = getUserRole();
+  const [role, setRole] = useState<string | null>(null);
 
   const [request, setRequest] = useState<WorkflowRequest | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,6 +41,7 @@ export default function RequestDetailPage({ params }: { params: Promise<{ id: st
       router.replace("/login");
       return;
     }
+    setRole(getUserRole());
     getRequestById(Number(id))
       .then(setRequest)
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to load request"))
