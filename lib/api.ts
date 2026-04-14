@@ -67,3 +67,6 @@ export const approveRequest = (id: number, data: DecisionDTO): Promise<WorkflowR
 
 export const rejectRequest = (id: number, data: DecisionDTO): Promise<WorkflowRequest> =>
   fetchApi(`/api/requests/${id}/reject`, "POST", data);
+
+export const cancelRequest = (id: number): Promise<WorkflowRequest> =>
+  fetchApi(`/api/requests/${id}/cancel`, "POST", {});

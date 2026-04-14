@@ -1,6 +1,6 @@
 export type Role = "REQUESTER" | "APPROVER";
 export type RequestType = "LEAVE" | "BUDGET";
-export type RequestStatus = "PENDING" | "APPROVED" | "REJECTED";
+export type RequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
 
 export interface User {
   id: number;
