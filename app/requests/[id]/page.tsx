@@ -5,14 +5,13 @@ export const dynamic = "force-dynamic";
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { isLoggedIn, getUserRole } from "@/lib/auth";
-import { getRequestById, approveRequest, rejectRequest, cancelRequest } from "@/lib/api";
+import { getRequestById, approveRequest, rejectRequest } from "@/lib/api";
 import type { WorkflowRequest, RequestStatus } from "@/lib/types";
 
 const statusStyles: Record<RequestStatus, string> = {
   PENDING: "bg-yellow-100 text-yellow-800",
   APPROVED: "bg-green-100 text-green-800",
   REJECTED: "bg-red-100 text-red-800",
-  CANCELLED: "bg-gray-100 text-gray-600",
 };
 
 function Field({ label, value }: { label: string; value?: string | number | null }) {
@@ -165,38 +164,6 @@ export default function RequestDetailPage({ params }: { params: Promise<{ id: st
                 )}
               </dl>
             </div>
-
-            {/* Requester cancel panel */}
-            {request.status === "PENDING" && role === "REQUESTER" && (
-              <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
-                <h3 className="text-sm font-semibold text-gray-900 mb-4">Cancel Request</h3>
-
-                {actionError && (
-                  <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-                    {actionError}
-                  </div>
-                )}
-
-                <button
-                  onClick={async () => {
-                    setActionError("");
-                    setActionLoading(true);
-                    try {
-                      const updated = await cancelRequest(request.id);
-                      setRequest(updated);
-                    } catch (err) {
-                      setActionError(err instanceof Error ? err.message : "Cancellation failed");
-                    } finally {
-                      setActionLoading(false);
-                    }
-                  }}
-                  disabled={actionLoading}
-                  className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {actionLoading ? "…" : "Cancel Request"}
-                </button>
-              </div>
-            )}
 
             {/* Approver action panel */}
             {request.status === "PENDING" && role === "APPROVER" && (
